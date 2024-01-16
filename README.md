@@ -15,7 +15,7 @@ personal study for hult prize
 
 ### var Keyword   
 var name = 'youngsan'; 처럼 변수 타입을 지정해주지 않아도 var 키워드로 변수 선언 가능.  
-<u>**dart의 권장 사항 =>** <span style="color:yellow"><u>관습적으로 함수나 메소드 내부에 지역 변수를 선언할 때는, var 사용</span></u>    
+**dart의 권장 사항 =>** <span style="color:yellow"><u>관습적으로 함수나 메소드 내부에 지역 변수를 선언할 때는, var 사용</span></u>    
 <br/>
 ```dart
 void main()
