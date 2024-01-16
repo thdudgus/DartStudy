@@ -15,7 +15,7 @@ personal study for hult prize
 
 ### var Keyword   
 var name = 'youngsan'; 처럼 변수 타입을 지정해주지 않아도 var 키워드로 변수 선언 가능.  
-**dart의 권장 사항 =>** <span style="color:yellow">관습적으로 함수나 메소드 내부에 지역 변수를 선언할 때는, var 사용</span>    
+**dart의 권장 사항 =>** <u><span style="color:yellow">관습적으로 함수나 메소드 내부에 지역 변수를 선언할 때는, var 사용</span></u>    
 <br/>
 ```dart
 void main()
@@ -63,7 +63,7 @@ void main()
 }
 ```
 dynamic을 이용하면 dart가 데이터 타입을 확인해줄 수 있음.   
-<span style="color:yellow">**dynamic은 꼭 필요한 상황에서만 사용하는 것을 권장**</span>
+<u><span style="color:yellow">**dynamic은 꼭 필요한 상황에서만 사용하는 것을 권장**</span></u>
 #
 
 ### Nullable Variables
@@ -88,7 +88,7 @@ void main()
 ```
 **dart의 null safety**  
 어떤 변수, 혹은 data가 null이 될 수 있음을 명시하는 것. 어떤 data가 null일 때 참조하지 않도록 dart가 도와줄 것임.   
-<span style="color:yellow"> 기본적으로 모든 변수는 non-nullable </span>  
+<u><span style="color:yellow"> 기본적으로 모든 변수는 non-nullable </span></u>  
 <br/>
 flutter를 하다보면 '?'를 많이 발견하게 되는데, API 같은 데에서 data를 받아올 때 등임.   
 #
@@ -141,7 +141,7 @@ void main()
 ```
 <br/>
 
-<span style="color:yellow"> const는 **compile-time**에 알고 있는 값이어야 함.</span>   
+<u><span style="color:yellow"> const는 **compile-time**에 알고 있는 값이어야 함.</span></u>   
 예를 들어 API 요청을 한다고 했을 때 (사용자의 휴대폰에서 앱을 실행할 때 이루어지는 것들),  
 아래 코드는 컴파일러가 API 변수 값을 모르기 때문에 compile-time constant가 아님.
 ```dart
