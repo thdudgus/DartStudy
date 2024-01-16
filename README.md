@@ -6,6 +6,7 @@ personal study for hult prize
 
 #
 ## 2024.01.16
+## VARIABLES
 ### main  
 실제로 동작하는 코드는 모두 main()에 넣어줘야 함.  
 세미콜론(;)을 문장 끝에 넣어줘야 하는데, 특정 기능(casecade operator)엔 일부러 넣지 않아야 하기 때문.  
@@ -14,7 +15,8 @@ personal study for hult prize
 
 ### var Keyword   
 var name = 'youngsan'; 처럼 변수 타입을 지정해주지 않아도 var 키워드로 변수 선언 가능.  
-<span style="color:yellow">관습적으로 함수나 메소드 내부에 지역 변수를 선언할 때는, var 사용</span> **=> dart의 권장 사항**   
+**dart의 권장 사항 =>** <span style="color:yellow">관습적으로 함수나 메소드 내부에 지역 변수를 선언할 때는, var 사용</span>    
+<br/>
 ```dart
 void main()
 {
@@ -30,7 +32,7 @@ String name 'kageyama'; 처럼 명시적으로 변수 타입을 지정해주어�
 ##
 
 
-### dynamic
+### Dynamic
 dynamic은 여러 타입을 가질 수 있는 변수에 쓰는 키워드  
 ```dart
 void main()
@@ -42,7 +44,7 @@ void main()
 }
 ```
 해당 코드가 가능한 이유는 변수의 타입이 dynamic이기 때문.   
-  
+<br/>
 
    **dynamic이 필요한 이유**  
    - 변수가 어떤 타입인지 알기 어려운 경우
@@ -87,11 +89,12 @@ void main()
 **dart의 null safety**  
 어떤 변수, 혹은 data가 null이 될 수 있음을 명시하는 것. 어떤 data가 null일 때 참조하지 않도록 dart가 도와줄 것임.   
 <span style="color:yellow"> 기본적으로 모든 변수는 non-nullable </span>  
+<br/>
 flutter를 하다보면 '?'를 많이 발견하게 되는데, API 같은 데에서 data를 받아올 때 등임.   
 #
 
 ### Final Variables
-처음 변수의 값을 선언하면 중간에 바꿀 수 없음. javascript의 const와 같음.
+처음 변수의 값을 선언하면 중간에 바꿀 수 없음. javascript나 typescript의 const와 같음.
 ```dart
 void main()
 {
@@ -109,11 +112,12 @@ late는 초기 데이터 없이 변수를 선언할 수 있게 해줌.
 void main()
 {
     late final String name;
-    // do something, go to api, api의 요청으로 데이터를 받은 후, 
+    // ex) do something, go to api, api의 요청으로 데이터를 받은 후, 
     name = 'san'; // 그 데이터를 나중에 변수에 넣을 수 있음.
     name = '9'; // 재설정 불가능
 }
 ```
+<br/>
 
 flutter로 data fetching할 때 유용함.
 ```dart
@@ -123,3 +127,28 @@ void main()
     print(name); // dart는 name이 late변수이기 때문에, 값을 넣기 전에 접근하지 말아야 한다는 걸 알려줌. like null safety
 }
 ```
+#
+
+### Const Variables
+javascript나 typescript의 const와 다름.  
+dart에서 const는 **compile-time constant**를 생성. const는 상수이기 때문에 중간에 값 변경 불가.
+```dart
+void main()
+{
+    const name = 'young'; 
+    name = 'san'; // 재설정 불가능
+}
+```
+<br/>
+
+<span style="color:yellow"> const는 **compile-time**에 알고 있는 값이어야 함.</span>   
+예를 들어 API 요청을 한다고 했을 때 (사용자의 휴대폰에서 앱을 실행할 때 이루어지는 것들),  
+아래 코드는 컴파일러가 API 변수 값을 모르기 때문에 compile-time constant가 아님.
+```dart
+void main(){
+const API = fetchAPI(); // API가 받아와야 하는 값이기 때문에 const가 아닌 final이나 var이 맞음.
+}
+```
+const는 컴파일 할 때 알고 있는 값에 사용하는 것.  
+스토어에 앱을 올리기 전에 알고 있는 값.  
+어떤 값인지 모르고, 그 값이 API로부터 온다거나 사용자가 화면에서 입력해야 하는 값이라면, final이나 var가 되어야 함.
