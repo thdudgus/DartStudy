@@ -431,3 +431,375 @@ void main() {
     print(reverseListOfNumbers([1, 2, 3]));
 }
 ```
+#
+## CLASSES
+### class
+class를 생성할 땐 반드시 타입을 명시해줘야 함.
+```dart
+class Player {
+    final String name = 'young';
+    int xp = 1500;
+
+    void sayHello(){
+        print("hi, my name is $name"); // $this.name도 가능하나 권장 x
+    }
+    // 메소드 내에서 같은 이름으로 사용되는 경우만 사용.
+    void sayHello(){
+        var name = 'san';
+        print("hi, my name is ${this.name}"); 
+    }
+}
+
+void main() {
+    var player = Player(); // new Player()도 무방
+}
+```
+#
+
+### Constructor
+```dart
+class Player {
+    final String name;
+    int xp;
+    String team;
+    int age;
+
+    // constructor (생성자)
+    Player(this.name, this.xp); // 순서가 중요, positional
+
+    void sayHello(){
+        print("hi, my name is $name"); 
+    }
+}
+
+void main() {
+    var player = Player('young', 1500);
+    player.sayHello();
+
+    var player2 = Player('san', 2500);
+    player2.sayHello();
+}
+```
+#
+
+### Named Constructor Parameters
+class의 규모가 커지면 생성자의 매개변수 순서에 혼동이 올 수 있음. 또한, 정의를 계속 찾아봐야 하는 등 번거로워 질 수 있기 때문에 이름을 붙임.   
+flutter에서 자주 사용.
+```dart
+class Player {
+  final String name;
+  int xp = 1500;
+  int age;
+  String team;
+
+  // constructor (기본 생성자)
+  Player({
+    required this.name, 
+    required this.xp, 
+    required this.team, 
+    required this.age}); // 순서가 중요하지 않아짐. null이 있을 수 있기에, 값들이 반드시 있어야 한다는 required를 앞에 삽입.
+  void sayHello() {
+    print("hi, I am $name in $team, my age is $age and my xp is $xp");
+  }
+}
+
+void main() {
+  var player = Player(name: 'kageyama', age: 15, team: 'karasuno', xp: 1500);
+  player.sayHello();
+}
+```
+결과  : hi, I am kageyama in karasuno, my age is 15 and my xp is 1500
+#
+
+### Named Constructors
+flutter에서 constructor를 만들 때 많이 사용하는 패턴 중 하나.   
+**생성자에 이름을 붙여, 필요에 따라 인자를 다르게 받도록 함.**   
+:을 사용하여 argument와 property를 일대일로 초기화하는 생성자를 만들 수 있음.
+```dart
+class Player {
+  final String name;
+  int xp = 1500;
+  int age;
+  String team;
+
+  // constructor (기본 생성자)
+  Player(
+      {required this.name,
+      required this.xp,
+      required this.team,
+      required this.age});
+
+  // Named constructor
+  // 기본적으로 positional parameter는 required가 아니기 때문에 명시적으로 작성해줌.
+  Player.createBlackPlayer({ 
+    required String name,
+    required int age,
+  })  : this.age = age,
+        this.name = name, // 받아오는 값
+        this.team = 'balck',
+        this.xp = 0; // 자동 할당
+
+  // positional constructor
+  // 기본적으로 positional parameter는 required
+  Player.createRedPlayer(String name, int age)
+      : this.age = age,
+        this.name = name, // 받아오는 값
+        this.team = 'red',
+        this.xp = 0; // 자동 할당
+
+  void sayHello() {
+    print("hi, I am $name in $team, my age is $age and my xp is $xp");
+  }
+}
+
+void main() {
+  var player = Player.createBlackPlayer(
+    name: 'tobio',
+    age: 15,
+  );
+  player.sayHello();
+
+  var player2 = Player.createRedPlayer("kenma", 16);
+  player2.sayHello();
+}
+```
+결과 :    
+hi, I am tobio in balck, my age is 15 and my xp is 0   
+hi, I am kenma in red, my age is 16 and my xp is 0
+#
+
+
+### constructor simulation example
+API로부터 데이터를 받아옴. ex ) Jason Format  
+데이터를 받으면 그걸 class로 바꿔야 함. Flutter dart class   
+```dart
+class Player {
+  final String name;
+  int xp;
+  String team;
+
+  // 'fromJson'이라는 name constructor
+  Player.fromJson(Map<String, dynamic> playerJson)
+      //property 초기화
+      : name = playerJson['name'], // class 내부의 name은 playerJson Map에서 key가 name인 값을 가져와 넣음.
+        xp = playerJson['xp'], // name과 같이 실행
+        team = playerJson['team']; // name과 같이 실행
+
+  void sayHello() {
+    print("hi, I am $name in $team and my xp is $xp");
+  }
+}
+
+void main() {
+  // API로부터 여러 Player가 들어있는 목록을 받는다고 가정.
+  var apiData = [
+    {
+      "name": "hyun",
+      "team": "red",
+      "xp": 0,
+    },
+    {
+      "name": "so",
+      "team": "green",
+      "xp": 1,
+    },
+    {
+      "name": "young",
+      "team": "blue",
+      "xp": 2,
+    },
+  ]; // 구조화 되지 않은 세 개의 elements
+
+  // element들을 각 player class로 바꿈.
+  apiData.forEach((playerJson) {
+    var player = Player.fromJson(playerJson);
+    player.sayHello();
+  });
+}
+```
+결과 :   
+hi, I am hyun in red and my xp is 0  
+hi, I am so in green and my xp is 1  
+hi, I am young in blue and my xp is 2  
+#
+
+### Cascade Notation
+```dart
+class Player {
+  String name;
+  int xp;
+  String team;
+
+  Player({
+    required this.name,
+    required this.xp,
+    required this.team,
+  });
+
+  void sayHello() {
+    print("hi, I am $name in $team and my xp is $xp");
+  }
+}
+
+void main() {
+
+  var young = Player(name: 'young', xp: 1200, team: 'blue');
+  young.name = 'hyun';
+  young.team = 'red';
+  young.xp = 1500;
+  // 다른 표기 (= cascade)
+  var young = Player(name: 'young', xp: 1200, team: 'blue')
+    ..name = 'hyun'
+    ..team = 'red'
+    ..xp = 1500;
+  
+  
+  // cascade는 바로 앞 class를 가리킴. object 생성 직후가 아닌 나중에도 사용 가능하다는 뜻.
+  var young = Player(name: 'young', xp: 1200, team: 'blue');
+  var potato = young
+    ..name = 'hyun'
+    ..team = 'red'
+    ..xp = 1500
+    ..sayHello();
+}
+```
+#
+
+### Enum
+```dart
+enum Team { red, blue }
+enum XPlevel { beginner, medium, pro }
+
+class Player {
+  String name;
+  XPlevel xp;
+  Team team;
+
+  Player({
+    required this.name,
+    required this.xp,
+    required this.team,
+  });
+
+  void sayHello() {
+    print("hi, I am $name in $team and my xp is $xp");
+  }
+}
+
+void main() {
+  var young = Player(
+    name: 'hyun', 
+    xp: XPlevel.beginner, 
+    team: Team.red);
+  young.sayHello();
+
+  var potato = young
+    ..name = 'so'
+    ..team = Team.blue
+    ..xp = XPlevel.pro
+    ..sayHello();
+}
+```
+#
+
+### Abstract Classes
+추상 클래스는 메소드의 이름과 반환 타입만 정해서 정의할 수 있음.   
+이를 상속 받은 클래스는 해당 메소드의 실행 부분을 구현해야 함.
+```dart
+abstract clss Human{
+    void walk();  // 함수 실행 부분 구현 x
+}
+
+class Player extends Human{
+    void walk(){ // 상속 받은 클래스 내에서 자체적으로 구현
+        print("걷기 싫습니다");
+    }
+}
+
+class Coach extends Human{
+    void walk(){ // 상속 받은 클래스 내에서 자체적으로 구현
+        print("걸어");
+    }
+}
+```
+#
+
+### Inheritance
+super는 상속한 부모 클래스의 property에 접근하게 하거나 메소드를 호출할 수 있게 함.   
+<br/>
+**확장한 부모 클래스가 생성자를 포함하고 있고 그 클래스를 다른 어떤 곳에서 상속 받아 사용하려면, 필요한 값을 전달해야 하고 그 부모 클래스의 생성자를 호출해야 함.**
+
+```dart
+abstract clss Human{
+    final String name;
+    Human({required this.name}); // 생성자
+    void sayHello(){
+        print("hello, I am $name");
+    }
+    
+}
+
+enum Team {blue, red}
+
+class Player extends Human{
+    final Team team;
+
+    Player({  // 생성자
+        required this.team,
+        required String name. // Human을 상속 받았기 때문에, Human의 생성자도 호출해야 함. 필수 요소 넣어줌.
+    }) : super(name : name); // name을 super 생성자에 전달
+    // Human 클래스에 required가 없다면 super(name);도 가능. 선택사항
+
+
+    // Human의 sayHello()를 재정의
+    @override
+    void sayHello(){
+        super.sayHello(); // Human의 원래 메소드
+        print('and I play for ${team}'); // 새롭게 추가한 부분
+    }
+}
+
+void main()
+{
+    var platyer = Player(team : Team.red, name : 'young');
+    player.sayHello(); // 메소드 뿐 아니라 함수도 해당 방법으로 사용 가능.
+}
+```
+#
+
+### Mixins
+**생성자가 없는 클래스**를 의미. with 사용.  
+여러 클래스에 재사용이 가능.    
+<br/>
+extends와 다름. extend를 하게 되면 확장한 클래스는 부모 클래스가 되고, 자식클래스는 super를 통해 부모클래스에 접근할 수 있으며 부모 클래스의 인스턴스가 됨.   
+mixin은 **with를 사용해 mixin 내부의 property와 메소드를 가져오는 것.**   
+
+```dart
+enum Team {blue, red}
+
+class Strong {
+    final double strengthLevel = 1500.99;
+}
+
+class RunQuick {
+    print("ruuuuuun!");
+}
+
+class Tall {
+    final int height = 1.99;
+}
+
+// mixin 클래스들은 여러 클래스에 재사용이 가능. 필요한 특성만 상속 없이 가져다 쓸 수 있음.
+class Player with Strong, RunQuickm, Tall {
+    final Team team;
+    Player({
+        required this.team,
+    });
+}
+class Horese with Strong, RunQuick{
+
+}
+class Kids with RunQuick {
+
+}
+``` 
